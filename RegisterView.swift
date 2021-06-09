@@ -10,7 +10,10 @@ import SwiftUI
 struct RegisterView: View {
     @State private var name = ""
     @State private var nameIsValid = false
-    @EnvironmentObject var user: UserManager
+//    @EnvironmentObject var user: UserManager
+    
+    @AppStorage("person") var nameNew = ""
+    @AppStorage("logIn") var logIn = false
     
     var body: some View {
         VStack {
@@ -35,11 +38,12 @@ struct RegisterView: View {
             }
         }
     }
+    
     private func registerUser() {
-        if !name.isEmpty {
-            user.name = name
-            user.isRegister.toggle()
-        }
+//        user.name = name
+        nameNew = name
+        logIn.toggle()
+//        user.isRegister.toggle()
     }
     
     private func checkingTF(_ text: String) {

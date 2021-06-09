@@ -8,22 +8,26 @@
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject var user: UserManager
+//    @EnvironmentObject var user: UserManager
     @StateObject private var timer = TimeCounter()
+    
+    @AppStorage("person") var nameNew = ""
+    @AppStorage("logIn") var logIn = false
     
     var body: some View {
         VStack {
-            Text("Hi, \(user.name)!")
+            Text("Hi, \(nameNew)!")
                 .font(.largeTitle)
-                .offset(x: 0, y: 100)
+                .offset(x: 0, y: 50)
             Text("\(timer.counter)")
                 .font(.largeTitle)
-                .offset(x: 0, y: 200)
+                .offset(x: 0, y: 120)
             Spacer()
-            ButtonView(timer: timer, color: .red)
+            StartButtonView(timer: timer)
                 .padding()
-            Button("log of") {
-                user.isRegister.toggle()
+            ButtonView(text: "Log out", color: .blue) {
+//                user.isRegister.toggle()
+                logIn.toggle()
             }
             Spacer()
         }
@@ -31,13 +35,24 @@ struct ContentView: View {
     }
 }
 
-struct ButtonView: View {
+struct StartButtonView: View {
     @ObservedObject var timer: TimeCounter
-    let color: Color
     
     var body: some View {
-        Button(action: timer.startTimer) {
-            Text(timer.buttonTitle)
+        ButtonView(text: timer.buttonTitle,
+                   color: .red,
+                   action: timer.startTimer)
+    }
+}
+
+struct ButtonView: View {
+    let text: String
+    let color: Color
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            Text(text)
                 .font(.title)
                 .fontWeight(.bold)
                 .foregroundColor(.white)
@@ -51,8 +66,6 @@ struct ButtonView: View {
         )
     }
 }
-
-
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
